@@ -22,6 +22,11 @@ void setup()
     Serial.println("Could not find a valid MPU6050 sensor, check wiring!");
     delay(500);
   }
+
+  // If you want, you can set accelerometer offsets
+  // mpu.setAccelOffsetX();
+  // mpu.setAccelOffsetY();
+  // mpu.setAccelOffsetZ();
   
   checkSettings();
 }
@@ -30,10 +35,10 @@ void checkSettings()
 {
   Serial.println();
   
-  Serial.print(" * Sleep Mode:    ");
+  Serial.print(" * Sleep Mode:            ");
   Serial.println(mpu.getSleepEnabled() ? "Enabled" : "Disabled");
   
-  Serial.print(" * Clock Source:  ");
+  Serial.print(" * Clock Source:          ");
   switch(mpu.getClockSource())
   {
     case MPU6050_CLOCK_KEEP_RESET:     Serial.println("Stops the clock and keeps the timing generator in reset"); break;
@@ -45,16 +50,7 @@ void checkSettings()
     case MPU6050_CLOCK_INTERNAL_8MHZ:  Serial.println("Internal 8MHz oscillator"); break;
   }
   
-  Serial.print(" * Gyroscope:     ");
-  switch(mpu.getScale())
-  {
-    case MPU6050_SCALE_2000DPS:        Serial.println("2000 dps"); break;
-    case MPU6050_SCALE_1000DPS:        Serial.println("1000 dps"); break;
-    case MPU6050_SCALE_500DPS:         Serial.println("500 dps"); break;
-    case MPU6050_SCALE_250DPS:         Serial.println("250 dps"); break;
-  } 
-  
-  Serial.print(" * Accelerometer: ");
+  Serial.print(" * Accelerometer:         ");
   switch(mpu.getRange())
   {
     case MPU6050_RANGE_16G:            Serial.println("+/- 16 g"); break;
@@ -62,6 +58,13 @@ void checkSettings()
     case MPU6050_RANGE_4G:             Serial.println("+/- 4 g"); break;
     case MPU6050_RANGE_2G:             Serial.println("+/- 2 g"); break;
   }  
+
+  Serial.print(" * Accelerometer offsets: ");
+  Serial.print(mpu.getAccelOffsetX());
+  Serial.print(" / ");
+  Serial.print(mpu.getAccelOffsetY());
+  Serial.print(" / ");
+  Serial.println(mpu.getAccelOffsetZ());
   
   Serial.println();
 }

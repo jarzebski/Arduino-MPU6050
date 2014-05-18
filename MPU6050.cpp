@@ -252,6 +252,66 @@ Vector MPU6050::readNormalizeGyro()
     return ng;
 }
 
+int16_t MPU6050::getGyroOffsetX(void)
+{
+    return readRegister16(MPU6050_REG_GYRO_XOFFS_H);
+}
+
+int16_t MPU6050::getGyroOffsetY(void)
+{
+    return readRegister16(MPU6050_REG_GYRO_YOFFS_H);
+}
+
+int16_t MPU6050::getGyroOffsetZ(void)
+{
+    return readRegister16(MPU6050_REG_GYRO_ZOFFS_H);
+}
+
+void MPU6050::setGyroOffsetX(int16_t offset)
+{
+    writeRegister16(MPU6050_REG_GYRO_XOFFS_H, offset);
+}
+
+void MPU6050::setGyroOffsetY(int16_t offset)
+{
+    writeRegister16(MPU6050_REG_GYRO_YOFFS_H, offset);
+}
+
+void MPU6050::setGyroOffsetZ(int16_t offset)
+{
+    writeRegister16(MPU6050_REG_GYRO_ZOFFS_H, offset);
+}
+
+int16_t MPU6050::getAccelOffsetX(void)
+{
+    return readRegister16(MPU6050_REG_ACCEL_XOFFS_H);
+}
+
+int16_t MPU6050::getAccelOffsetY(void)
+{
+    return readRegister16(MPU6050_REG_ACCEL_YOFFS_H);
+}
+
+int16_t MPU6050::getAccelOffsetZ(void)
+{
+    return readRegister16(MPU6050_REG_ACCEL_ZOFFS_H);
+}
+
+void MPU6050::setAccelOffsetX(int16_t offset)
+{
+    writeRegister16(MPU6050_REG_ACCEL_XOFFS_H, offset);
+}
+
+void MPU6050::setAccelOffsetY(int16_t offset)
+{
+    writeRegister16(MPU6050_REG_ACCEL_YOFFS_H, offset);
+}
+
+void MPU6050::setAccelOffsetZ(int16_t offset)
+{
+    writeRegister16(MPU6050_REG_ACCEL_ZOFFS_H, offset);
+}
+
 // Fast read 8-bit from register
 uint8_t MPU6050::fastRegister8(uint8_t reg)
 {
@@ -314,6 +374,50 @@ void MPU6050::writeRegister8(uint8_t reg, uint8_t value)
     #else
 	Wire.send(reg);
 	Wire.send(value);
+    #endif
+    Wire.endTransmission();
+}
+
+int16_t MPU6050::readRegister16(uint8_t reg)
+{
+    int16_t value;
+    Wire.beginTransmission(MPU6050_ADDRESS);
+    #if ARDUINO >= 100
+        Wire.write(reg);
+    #else
+        Wire.send(reg);
+    #endif
+    Wire.endTransmission();
+
+    Wire.beginTransmission(MPU6050_ADDRESS);
+    Wire.requestFrom(MPU6050_ADDRESS, 2);
+    while(!Wire.available()) {};
+    #if ARDUINO >= 100
+        uint8_t vha = Wire.read();
+        uint8_t vla = Wire.read();
+    #else
+        uint8_t vha = Wire.receive();
+        uint8_t vla = Wire.receive();
+    #endif;
+    Wire.endTransmission();
+
+    value = vha << 8 | vla;
+
+    return value;
+}
+
+void MPU6050::writeRegister16(uint8_t reg, int16_t value)
+{
+    Wire.beginTransmission(MPU6050_ADDRESS);
+
+    #if ARDUINO >= 100
+	Wire.write(reg);
+	Wire.write((uint8_t)(value >> 8));
+	Wire.write((uint8_t)value);
+    #else
+	Wire.send(reg);
+	Wire.send((uint8_t)(value >> 8));
+	Wire.send((uint8_t)value);
     #endif
     Wire.endTransmission();
 }

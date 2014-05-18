@@ -29,6 +29,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define MPU6050_ADDRESS           (0x68) // 0x69 when AD0 pin to Vcc
 
+#define MPU6050_REG_ACCEL_XOFFS_H (0x06)
+#define MPU6050_REG_ACCEL_XOFFS_L (0x07)
+#define MPU6050_REG_ACCEL_YOFFS_H (0x08)
+#define MPU6050_REG_ACCEL_YOFFS_L (0x09)
+#define MPU6050_REG_ACCEL_ZOFFS_H (0x0A)
+#define MPU6050_REG_ACCEL_ZOFFS_L (0x0B)
+#define MPU6050_REG_GYRO_XOFFS_H  (0x13)
+#define MPU6050_REG_GYRO_XOFFS_L  (0x14)
+#define MPU6050_REG_GYRO_YOFFS_H  (0x15)
+#define MPU6050_REG_GYRO_YOFFS_L  (0x16)
+#define MPU6050_REG_GYRO_ZOFFS_H  (0x17)
+#define MPU6050_REG_GYRO_ZOFFS_L  (0x18)
 #define MPU6050_REG_GYRO_CONFIG   (0x1B) // Gyroscope Configuration
 #define MPU6050_REG_ACCEL_CONFIG  (0x1C) // Accelerometer Configuration
 #define MPU6050_REG_ACCEL_XOUT_H  (0x3B)
@@ -98,6 +110,20 @@ class MPU6050
 	bool getSleepEnabled(void);
 	void setSleepEnabled(bool state);
 
+	int16_t getGyroOffsetX(void);
+	void setGyroOffsetX(int16_t offset);
+	int16_t getGyroOffsetY(void);
+	void setGyroOffsetY(int16_t offset);
+	int16_t getGyroOffsetZ(void);
+	void setGyroOffsetZ(int16_t offset);
+
+	int16_t getAccelOffsetX(void);
+	void setAccelOffsetX(int16_t offset);
+	int16_t getAccelOffsetY(void);
+	void setAccelOffsetY(int16_t offset);
+	int16_t getAccelOffsetZ(void);
+	void setAccelOffsetZ(int16_t offset);
+
 	Vector readRawGyro(void);
 	Vector readNormalizeGyro(void);
 
@@ -110,9 +136,14 @@ class MPU6050
 
 	float dpsPerDigit, rangePerDigit;
 
-	void writeRegister8(uint8_t reg, uint8_t value);
-	uint8_t readRegister8(uint8_t reg);
 	uint8_t fastRegister8(uint8_t reg);
+
+	uint8_t readRegister8(uint8_t reg);
+	void writeRegister8(uint8_t reg, uint8_t value);
+
+	int16_t readRegister16(uint8_t reg);
+	void writeRegister16(uint8_t reg, int16_t value);
+
 	bool readRegisterBit(uint8_t reg, uint8_t pos);
 	void writeRegisterBit(uint8_t reg, uint8_t pos, bool state);
 
