@@ -33,6 +33,18 @@ bool MPU6050::begin(mpu6050_dps_t scale, mpu6050_range_t range)
 {
     Wire.begin();
 
+    // Reset calibrate values
+    dg.XAxis = 0;
+    dg.YAxis = 0;
+    dg.ZAxis = 0;
+    useCalibrate = false;
+
+    // Reset threshold values
+    tg.XAxis = 0;
+    tg.YAxis = 0;
+    tg.ZAxis = 0;
+    actualThreshold = 0;
+
     // Check MPU6050 Who Am I Register
     if (fastRegister8(MPU6050_REG_WHO_AM_I) != 0x68)
     {
@@ -245,9 +257,24 @@ Vector MPU6050::readNormalizeGyro()
 {
     readRawGyro();
 
-    ng.XAxis = rg.XAxis * dpsPerDigit;
-    ng.YAxis = rg.YAxis * dpsPerDigit;
-    ng.ZAxis = rg.ZAxis * dpsPerDigit;
+    if (useCalibrate)
+    {
+	ng.XAxis = (rg.XAxis - dg.XAxis) * dpsPerDigit;
+	ng.YAxis = (rg.YAxis - dg.YAxis) * dpsPerDigit;
+	ng.ZAxis = (rg.ZAxis - dg.ZAxis) * dpsPerDigit;
+    } else
+    {
+	ng.XAxis = rg.XAxis * dpsPerDigit;
+	ng.YAxis = rg.YAxis * dpsPerDigit;
+	ng.ZAxis = rg.ZAxis * dpsPerDigit;
+    }
+
+    if (actualThreshold)
+    {
+	if (abs(ng.XAxis) < tg.XAxis) ng.XAxis = 0;
+	if (abs(ng.YAxis) < tg.YAxis) ng.YAxis = 0;
+	if (abs(ng.ZAxis) < tg.ZAxis) ng.ZAxis = 0;
+    }
 
     return ng;
 }
@@ -310,6 +337,85 @@ void MPU6050::setAccelOffsetY(int16_t offset)
 void MPU6050::setAccelOffsetZ(int16_t offset)
 {
     writeRegister16(MPU6050_REG_ACCEL_ZOFFS_H, offset);
+}
+
+// Calibrate algorithm
+void MPU6050::calibrateGyro(uint8_t samples)
+{
+    // Set calibrate
+    useCalibrate = true;
+
+    // Reset values
+    float sumX = 0;
+    float sumY = 0;
+    float sumZ = 0;
+    float sigmaX = 0;
+    float sigmaY = 0;
+    float sigmaZ = 0;
+
+    // Read n-samples
+    for (uint8_t i = 0; i < samples; ++i)
+    {
+	readRawGyro();
+	sumX += rg.XAxis;
+	sumY += rg.YAxis;
+	sumZ += rg.ZAxis;
+
+	sigmaX += rg.XAxis * rg.XAxis;
+	sigmaY += rg.YAxis * rg.YAxis;
+	sigmaZ += rg.ZAxis * rg.ZAxis;
+
+	delay(5);
+    }
+
+    // Calculate delta vectors
+    dg.XAxis = sumX / samples;
+    dg.YAxis = sumY / samples;
+    dg.ZAxis = sumZ / samples;
+
+    // Calculate threshold vectors
+    th.XAxis = sqrt((sigmaX / 50) - (dg.XAxis * dg.XAxis));
+    th.YAxis = sqrt((sigmaY / 50) - (dg.YAxis * dg.YAxis));
+    th.ZAxis = sqrt((sigmaZ / 50) - (dg.ZAxis * dg.ZAxis));
+
+    // If already set threshold, recalculate threshold vectors
+    if (actualThreshold > 0)
+    {
+	setThreshold(actualThreshold);
+    }
+}
+
+// Get current threshold value
+uint8_t MPU6050::getThreshold(void)
+{
+    return actualThreshold;
+}
+
+// Set treshold value
+void MPU6050::setThreshold(uint8_t multiple)
+{
+    if (multiple > 0)
+    {
+	// If not calibrated, need calibrate
+	if (!useCalibrate)
+	{
+	    calibrateGyro();
+	}
+
+	// Calculate threshold vectors
+	tg.XAxis = th.XAxis * multiple;
+	tg.YAxis = th.YAxis * multiple;
+	tg.ZAxis = th.ZAxis * multiple;
+    } else
+    {
+	// No threshold
+	tg.XAxis = 0;
+	tg.YAxis = 0;
+	tg.ZAxis = 0;
+    }
+
+    // Remember old threshold value
+    actualThreshold = multiple;
 }
 
 // Fast read 8-bit from register

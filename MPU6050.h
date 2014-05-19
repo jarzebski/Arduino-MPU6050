@@ -124,6 +124,10 @@ class MPU6050
 	int16_t getAccelOffsetZ(void);
 	void setAccelOffsetZ(int16_t offset);
 
+	void calibrateGyro(uint8_t samples = 50);
+	void setThreshold(uint8_t multiple = 1);
+	uint8_t getThreshold(void);
+
 	Vector readRawGyro(void);
 	Vector readNormalizeGyro(void);
 
@@ -131,10 +135,14 @@ class MPU6050
 	Vector readNormalizeAccel(void);
 
     private:
-	Vector ra, rg;
-	Vector na, ng;
-
+	Vector ra, rg; // Raw vectors
+	Vector na, ng; // Normalized vectors
+	Vector tg, dg; // Threshold and Delta for Gyro
+	Vector th;     // Threshold
+	
 	float dpsPerDigit, rangePerDigit;
+	float actualThreshold;
+	bool useCalibrate;
 
 	uint8_t fastRegister8(uint8_t reg);
 
