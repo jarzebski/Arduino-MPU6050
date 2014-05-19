@@ -43,6 +43,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define MPU6050_REG_GYRO_ZOFFS_L  (0x18)
 #define MPU6050_REG_GYRO_CONFIG   (0x1B) // Gyroscope Configuration
 #define MPU6050_REG_ACCEL_CONFIG  (0x1C) // Accelerometer Configuration
+#define MPU6050_REG_INT_PIN_CFG   (0x37) // INT Pin. Bypass Enable Configuration
 #define MPU6050_REG_ACCEL_XOUT_H  (0x3B)
 #define MPU6050_REG_ACCEL_XOUT_L  (0x3C)
 #define MPU6050_REG_ACCEL_YOUT_H  (0x3D)
@@ -57,6 +58,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define MPU6050_REG_GYRO_YOUT_L   (0x46)
 #define MPU6050_REG_GYRO_ZOUT_H   (0x47)
 #define MPU6050_REG_GYRO_ZOUT_L   (0x48)
+#define MPU6050_REG_USER_CTRL     (0x6A) // User Control
 #define MPU6050_REG_PWR_MGMT_1    (0x6B) // Power Management 1
 #define MPU6050_REG_WHO_AM_I      (0x75) // Who Am I
 
@@ -109,8 +111,13 @@ class MPU6050
 	mpu6050_clockSource_t getClockSource(void);
 	mpu6050_dps_t getScale(void);
 	mpu6050_range_t getRange(void);
+
 	bool getSleepEnabled(void);
 	void setSleepEnabled(bool state);
+	bool getI2CMasterModeEnabled(void);
+	void setI2CMasterModeEnabled(bool state);
+	bool getI2CBypassEnabled(void);
+	void setI2CBypassEnabled(bool state);
 
 	float readTemperature(void);
 

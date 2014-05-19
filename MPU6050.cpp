@@ -156,7 +156,8 @@ mpu6050_clockSource_t MPU6050::getClockSource(void)
     return (mpu6050_clockSource_t)value;
 }
 
-bool MPU6050::getSleepEnabled()
+
+bool MPU6050::getSleepEnabled(void)
 {
     return readRegisterBit(MPU6050_REG_PWR_MGMT_1, 6);
 }
@@ -166,7 +167,27 @@ void MPU6050::setSleepEnabled(bool state)
     writeRegisterBit(MPU6050_REG_PWR_MGMT_1, 6, state);
 }
 
-Vector MPU6050::readRawAccel()
+bool MPU6050::getI2CMasterModeEnabled(void)
+{
+    return readRegisterBit(MPU6050_REG_USER_CTRL, 5);
+}
+
+void MPU6050::setI2CMasterModeEnabled(bool state)
+{
+    writeRegisterBit(MPU6050_REG_USER_CTRL, 5, state);
+}
+
+bool MPU6050::getI2CBypassEnabled(void)
+{
+    return readRegisterBit(MPU6050_REG_INT_PIN_CFG, 1);
+}
+
+void MPU6050::setI2CBypassEnabled(bool state)
+{
+    writeRegisterBit(MPU6050_REG_INT_PIN_CFG, 1, state);
+}
+
+Vector MPU6050::readRawAccel(void)
 {
     Wire.beginTransmission(MPU6050_ADDRESS);
     #if ARDUINO >= 100
@@ -204,7 +225,7 @@ Vector MPU6050::readRawAccel()
     return ra;
 }
 
-Vector MPU6050::readNormalizeAccel()
+Vector MPU6050::readNormalizeAccel(void)
 {
     readRawAccel();
 
@@ -215,7 +236,7 @@ Vector MPU6050::readNormalizeAccel()
     return na;
 }
 
-Vector MPU6050::readRawGyro()
+Vector MPU6050::readRawGyro(void)
 {
     Wire.beginTransmission(MPU6050_ADDRESS);
     #if ARDUINO >= 100
@@ -253,7 +274,7 @@ Vector MPU6050::readRawGyro()
     return rg;
 }
 
-Vector MPU6050::readNormalizeGyro()
+Vector MPU6050::readNormalizeGyro(void)
 {
     readRawGyro();
 
