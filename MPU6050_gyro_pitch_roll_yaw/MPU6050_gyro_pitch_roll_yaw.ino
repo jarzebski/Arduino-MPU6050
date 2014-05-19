@@ -30,10 +30,14 @@ void setup()
     Serial.println("Could not find a valid MPU6050 sensor, check wiring!");
     delay(500);
   }
-
+  
   // Calibrate gyroscope. The calibration must be at rest.
   // If you don't want calibrate, comment this line.
-  mpu.calibrateGyro(100);
+  mpu.calibrateGyro();
+
+  // Set threshold sensivty. Default 3.
+  // If you don't want use threshold, comment this line or set 0.
+  mpu.setThreshold(3);
 }
 
 void loop()
@@ -41,7 +45,7 @@ void loop()
   timer = millis();
 
   // Read normalized values
-  Vector norm = mup.readNormalizeGyro();
+  Vector norm = mpu.readNormalizeGyro();
 
   // Calculate Pitch, Roll and Yaw
   pitch = pitch + norm.YAxis * timeStep;

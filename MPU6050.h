@@ -49,6 +49,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define MPU6050_REG_ACCEL_YOUT_L  (0x3E)
 #define MPU6050_REG_ACCEL_ZOUT_H  (0x3F)
 #define MPU6050_REG_ACCEL_ZOUT_L  (0x40)
+#define MPU6050_REG_TEMP_OUT_H    (0x41)
+#define MPU6050_REG_TEMP_OUT_L    (0x42)
 #define MPU6050_REG_GYRO_XOUT_H   (0x43)
 #define MPU6050_REG_GYRO_XOUT_L   (0x44)
 #define MPU6050_REG_GYRO_YOUT_H   (0x45)
@@ -109,6 +111,8 @@ class MPU6050
 	mpu6050_range_t getRange(void);
 	bool getSleepEnabled(void);
 	void setSleepEnabled(bool state);
+
+	float readTemperature(void);
 
 	int16_t getGyroOffsetX(void);
 	void setGyroOffsetX(int16_t offset);

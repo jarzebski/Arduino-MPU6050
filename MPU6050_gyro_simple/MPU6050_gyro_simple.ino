@@ -15,8 +15,8 @@ void setup()
 {
   Serial.begin(115200);
 
+  // Initialize MPU6050
   Serial.println("Initialize MPU6050");
-
   while(!mpu.begin(MPU6050_SCALE_2000DPS, MPU6050_RANGE_2G))
   {
     Serial.println("Could not find a valid MPU6050 sensor, check wiring!");
@@ -28,6 +28,15 @@ void setup()
   // mpu.setGyroOffsetY(15);
   // mpu.setGyroOffsetZ(15);
   
+  // Calibrate gyroscope. The calibration must be at rest.
+  // If you don't want calibrate, comment this line.
+  mpu.calibrateGyro();
+
+  // Set threshold sensivty. Default 3.
+  // If you don't want use threshold, comment this line or set 0.
+  mpu.setThreshold(3);
+  
+  // Check settings
   checkSettings();
 }
 

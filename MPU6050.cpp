@@ -279,6 +279,13 @@ Vector MPU6050::readNormalizeGyro()
     return ng;
 }
 
+float MPU6050::readTemperature(void)
+{
+    int16_t T;
+    T = readRegister16(MPU6050_REG_TEMP_OUT_H);
+    return (float)T/340 + 36.53;
+}
+
 int16_t MPU6050::getGyroOffsetX(void)
 {
     return readRegister16(MPU6050_REG_GYRO_XOFFS_H);
