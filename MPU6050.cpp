@@ -379,6 +379,18 @@ Vector MPU6050::readNormalizeAccel(void)
     return na;
 }
 
+Vector MPU6050::readScaledAccel(void)
+{
+    readRawAccel();
+
+    na.XAxis = ra.XAxis * rangePerDigit;
+    na.YAxis = ra.YAxis * rangePerDigit;
+    na.ZAxis = ra.ZAxis * rangePerDigit;
+
+    return na;
+}
+
+
 Vector MPU6050::readRawGyro(void)
 {
     Wire.beginTransmission(MPU6050_ADDRESS);

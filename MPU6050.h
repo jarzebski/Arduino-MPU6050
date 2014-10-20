@@ -215,6 +215,7 @@ class MPU6050
 
 	Vector readRawAccel(void);
 	Vector readNormalizeAccel(void);
+	Vector readScaledAccel(void);
 
     private:
 	Vector ra, rg; // Raw vectors
