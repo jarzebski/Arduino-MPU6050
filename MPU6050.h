@@ -1,7 +1,7 @@
 /*
 MPU6050.h - Header file for the MPU6050 Triple Axis Gyroscope & Accelerometer Arduino Library.
 
-Version: W.I.P
+Version: 1.0.0
 (c) 2014 Korneliusz Jarzebski
 www.jarzebski.pl
 
@@ -27,40 +27,50 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "WProgram.h"
 #endif
 
-#define MPU6050_ADDRESS           (0x68) // 0x69 when AD0 pin to Vcc
+#define MPU6050_ADDRESS             (0x68) // 0x69 when AD0 pin to Vcc
 
-#define MPU6050_REG_ACCEL_XOFFS_H (0x06)
-#define MPU6050_REG_ACCEL_XOFFS_L (0x07)
-#define MPU6050_REG_ACCEL_YOFFS_H (0x08)
-#define MPU6050_REG_ACCEL_YOFFS_L (0x09)
-#define MPU6050_REG_ACCEL_ZOFFS_H (0x0A)
-#define MPU6050_REG_ACCEL_ZOFFS_L (0x0B)
-#define MPU6050_REG_GYRO_XOFFS_H  (0x13)
-#define MPU6050_REG_GYRO_XOFFS_L  (0x14)
-#define MPU6050_REG_GYRO_YOFFS_H  (0x15)
-#define MPU6050_REG_GYRO_YOFFS_L  (0x16)
-#define MPU6050_REG_GYRO_ZOFFS_H  (0x17)
-#define MPU6050_REG_GYRO_ZOFFS_L  (0x18)
-#define MPU6050_REG_GYRO_CONFIG   (0x1B) // Gyroscope Configuration
-#define MPU6050_REG_ACCEL_CONFIG  (0x1C) // Accelerometer Configuration
-#define MPU6050_REG_INT_PIN_CFG   (0x37) // INT Pin. Bypass Enable Configuration
-#define MPU6050_REG_ACCEL_XOUT_H  (0x3B)
-#define MPU6050_REG_ACCEL_XOUT_L  (0x3C)
-#define MPU6050_REG_ACCEL_YOUT_H  (0x3D)
-#define MPU6050_REG_ACCEL_YOUT_L  (0x3E)
-#define MPU6050_REG_ACCEL_ZOUT_H  (0x3F)
-#define MPU6050_REG_ACCEL_ZOUT_L  (0x40)
-#define MPU6050_REG_TEMP_OUT_H    (0x41)
-#define MPU6050_REG_TEMP_OUT_L    (0x42)
-#define MPU6050_REG_GYRO_XOUT_H   (0x43)
-#define MPU6050_REG_GYRO_XOUT_L   (0x44)
-#define MPU6050_REG_GYRO_YOUT_H   (0x45)
-#define MPU6050_REG_GYRO_YOUT_L   (0x46)
-#define MPU6050_REG_GYRO_ZOUT_H   (0x47)
-#define MPU6050_REG_GYRO_ZOUT_L   (0x48)
-#define MPU6050_REG_USER_CTRL     (0x6A) // User Control
-#define MPU6050_REG_PWR_MGMT_1    (0x6B) // Power Management 1
-#define MPU6050_REG_WHO_AM_I      (0x75) // Who Am I
+#define MPU6050_REG_ACCEL_XOFFS_H     (0x06)
+#define MPU6050_REG_ACCEL_XOFFS_L     (0x07)
+#define MPU6050_REG_ACCEL_YOFFS_H     (0x08)
+#define MPU6050_REG_ACCEL_YOFFS_L     (0x09)
+#define MPU6050_REG_ACCEL_ZOFFS_H     (0x0A)
+#define MPU6050_REG_ACCEL_ZOFFS_L     (0x0B)
+#define MPU6050_REG_GYRO_XOFFS_H      (0x13)
+#define MPU6050_REG_GYRO_XOFFS_L      (0x14)
+#define MPU6050_REG_GYRO_YOFFS_H      (0x15)
+#define MPU6050_REG_GYRO_YOFFS_L      (0x16)
+#define MPU6050_REG_GYRO_ZOFFS_H      (0x17)
+#define MPU6050_REG_GYRO_ZOFFS_L      (0x18)
+#define MPU6050_REG_GYRO_CONFIG       (0x1B) // Gyroscope Configuration
+#define MPU6050_REG_ACCEL_CONFIG      (0x1C) // Accelerometer Configuration
+#define MPU6050_REG_FF_THRESHOLD      (0x1D)
+#define MPU6050_REG_FF_DURATION       (0x1E)
+#define MPU6050_REG_MOT_THRESHOLD     (0x1F)
+#define MPU6050_REG_MOT_DURATION      (0x20)
+#define MPU6050_REG_ZMOT_THRESHOLD    (0x21)
+#define MPU6050_REG_ZMOT_DURATION     (0x22)
+#define MPU6050_REG_INT_PIN_CFG       (0x37) // INT Pin. Bypass Enable Configuration
+#define MPU6050_REG_INT_ENABLE        (0x38) // INT Enable
+#define MPU6050_REG_INT_STATUS        (0x3A)
+#define MPU6050_REG_ACCEL_XOUT_H      (0x3B)
+#define MPU6050_REG_ACCEL_XOUT_L      (0x3C)
+#define MPU6050_REG_ACCEL_YOUT_H      (0x3D)
+#define MPU6050_REG_ACCEL_YOUT_L      (0x3E)
+#define MPU6050_REG_ACCEL_ZOUT_H      (0x3F)
+#define MPU6050_REG_ACCEL_ZOUT_L      (0x40)
+#define MPU6050_REG_TEMP_OUT_H        (0x41)
+#define MPU6050_REG_TEMP_OUT_L        (0x42)
+#define MPU6050_REG_GYRO_XOUT_H       (0x43)
+#define MPU6050_REG_GYRO_XOUT_L       (0x44)
+#define MPU6050_REG_GYRO_YOUT_H       (0x45)
+#define MPU6050_REG_GYRO_YOUT_L       (0x46)
+#define MPU6050_REG_GYRO_ZOUT_H       (0x47)
+#define MPU6050_REG_GYRO_ZOUT_L       (0x48)
+#define MPU6050_REG_MOT_DETECT_STATUS (0x61)
+#define MPU6050_REG_MOT_DETECT_CTRL   (0x69)
+#define MPU6050_REG_USER_CTRL         (0x6A) // User Control
+#define MPU6050_REG_PWR_MGMT_1        (0x6B) // Power Management 1
+#define MPU6050_REG_WHO_AM_I          (0x75) // Who Am I
 
 #ifndef VECTOR_STRUCT_H
 #define VECTOR_STRUCT_H
@@ -71,6 +81,21 @@ struct Vector
     float ZAxis;
 };
 #endif
+
+struct Activites
+{
+    bool isOverflow;
+    bool isFreeFall;
+    bool isInactivity;
+    bool isActivity;
+    bool isPosActivityOnX;
+    bool isPosActivityOnY;
+    bool isPosActivityOnZ;
+    bool isNegActivityOnX;
+    bool isNegActivityOnY;
+    bool isNegActivityOnZ;
+    bool isDataReady;
+};
 
 typedef enum
 {
@@ -99,6 +124,24 @@ typedef enum
     MPU6050_RANGE_2G              = 0b00,
 } mpu6050_range_t;
 
+typedef enum
+{
+    MPU6050_DELAY_3MS             = 0b11,
+    MPU6050_DELAY_2MS             = 0b10,
+    MPU6050_DELAY_1MS             = 0b01,
+    MPU6050_NO_DELAY              = 0b00,
+} mpu6050_onDelay_t;
+
+typedef enum
+{
+    MPU6050_DHPF_HOLD             = 0b111,
+    MPU6050_DHPF_0_63HZ           = 0b100,
+    MPU6050_DHPF_1_25HZ           = 0b011,
+    MPU6050_DHPF_2_5HZ            = 0b010,
+    MPU6050_DHPF_5HZ              = 0b001,
+    MPU6050_DHPF_RESET            = 0b000,
+} mpu6050_dhpf_t;
+
 class MPU6050
 {
     public:
@@ -111,6 +154,33 @@ class MPU6050
 	mpu6050_clockSource_t getClockSource(void);
 	mpu6050_dps_t getScale(void);
 	mpu6050_range_t getRange(void);
+	void setDHPFMode(mpu6050_dhpf_t dhpf);
+	mpu6050_onDelay_t getAccelPowerOnDelay();
+	void setAccelPowerOnDelay(mpu6050_onDelay_t delay);
+
+	uint8_t getIntStatus(void);
+
+	bool getIntZeroMotionEnabled(void);
+	void setIntZeroMotionEnabled(bool state);
+	bool getIntMotionEnabled(void);
+	void setIntMotionEnabled(bool state);
+	bool getIntFreeFallEnabled(void);
+	void setIntFreeFallEnabled(bool state);
+
+	uint8_t getMotionDetectionThreshold(void);
+	void setMotionDetectionThreshold(uint8_t threshold);
+	uint8_t getMotionDetectionDuration(void);
+	void setMotionDetectionDuration(uint8_t duration);
+
+	uint8_t getZeroMotionDetectionThreshold(void);
+	void setZeroMotionDetectionThreshold(uint8_t threshold);
+	uint8_t getZeroMotionDetectionDuration(void);
+	void setZeroMotionDetectionDuration(uint8_t duration);
+
+	uint8_t getFreeFallDetectionThreshold(void);
+	void setFreeFallDetectionThreshold(uint8_t threshold);
+	uint8_t getFreeFallDetectionDuration(void);
+	void setFreeFallDetectionDuration(uint8_t duration);
 
 	bool getSleepEnabled(void);
 	void setSleepEnabled(bool state);
@@ -120,6 +190,7 @@ class MPU6050
 	void setI2CBypassEnabled(bool state);
 
 	float readTemperature(void);
+	Activites readActivites(void);
 
 	int16_t getGyroOffsetX(void);
 	void setGyroOffsetX(int16_t offset);
@@ -150,6 +221,7 @@ class MPU6050
 	Vector na, ng; // Normalized vectors
 	Vector tg, dg; // Threshold and Delta for Gyro
 	Vector th;     // Threshold
+	Activites a;   // Activities
 	
 	float dpsPerDigit, rangePerDigit;
 	float actualThreshold;

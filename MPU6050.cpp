@@ -1,7 +1,7 @@
 /*
 MPU6050.cpp - Class file for the MPU6050 Triple Axis Gyroscope & Accelerometer Arduino Library.
 
-Version: W.I.P.
+Version: 1.0.0
 (c) 2014 Korneliusz Jarzebski
 www.jarzebski.pl
 
@@ -138,6 +138,14 @@ mpu6050_range_t MPU6050::getRange(void)
     return (mpu6050_range_t)value;
 }
 
+void MPU6050::setDHPFMode(mpu6050_dhpf_t dhpf)
+{
+    uint8_t value;
+    value = readRegister8(MPU6050_REG_ACCEL_CONFIG);
+    value &= 0b11111000;
+    value |= dhpf;
+    writeRegister8(MPU6050_REG_ACCEL_CONFIG, value);
+}
 
 void MPU6050::setClockSource(mpu6050_clockSource_t source)
 {
@@ -156,7 +164,6 @@ mpu6050_clockSource_t MPU6050::getClockSource(void)
     return (mpu6050_clockSource_t)value;
 }
 
-
 bool MPU6050::getSleepEnabled(void)
 {
     return readRegisterBit(MPU6050_REG_PWR_MGMT_1, 6);
@@ -165,6 +172,96 @@ bool MPU6050::getSleepEnabled(void)
 void MPU6050::setSleepEnabled(bool state)
 {
     writeRegisterBit(MPU6050_REG_PWR_MGMT_1, 6, state);
+}
+
+bool MPU6050::getIntZeroMotionEnabled(void)
+{
+    return readRegisterBit(MPU6050_REG_INT_ENABLE, 5);
+}
+
+void MPU6050::setIntZeroMotionEnabled(bool state)
+{
+    writeRegisterBit(MPU6050_REG_INT_ENABLE, 5, state);
+}
+
+bool MPU6050::getIntMotionEnabled(void)
+{
+    return readRegisterBit(MPU6050_REG_INT_ENABLE, 6);
+}
+
+void MPU6050::setIntMotionEnabled(bool state)
+{
+    writeRegisterBit(MPU6050_REG_INT_ENABLE, 6, state);
+}
+
+bool MPU6050::getIntFreeFallEnabled(void)
+{
+    return readRegisterBit(MPU6050_REG_INT_ENABLE, 7);
+}
+
+void MPU6050::setIntFreeFallEnabled(bool state)
+{
+    writeRegisterBit(MPU6050_REG_INT_ENABLE, 7, state);
+}
+
+uint8_t MPU6050::getMotionDetectionThreshold(void)
+{
+    return readRegister8(MPU6050_REG_MOT_THRESHOLD);
+}
+
+void MPU6050::setMotionDetectionThreshold(uint8_t threshold)
+{
+    writeRegister8(MPU6050_REG_MOT_THRESHOLD, threshold);
+}
+
+uint8_t MPU6050::getMotionDetectionDuration(void)
+{
+    return readRegister8(MPU6050_REG_MOT_DURATION);
+}
+
+void MPU6050::setMotionDetectionDuration(uint8_t duration)
+{
+    writeRegister8(MPU6050_REG_MOT_DURATION, duration);
+}
+
+uint8_t MPU6050::getZeroMotionDetectionThreshold(void)
+{
+    return readRegister8(MPU6050_REG_ZMOT_THRESHOLD);
+}
+
+void MPU6050::setZeroMotionDetectionThreshold(uint8_t threshold)
+{
+    writeRegister8(MPU6050_REG_ZMOT_THRESHOLD, threshold);
+}
+
+uint8_t MPU6050::getZeroMotionDetectionDuration(void)
+{
+    return readRegister8(MPU6050_REG_ZMOT_DURATION);
+}
+
+void MPU6050::setZeroMotionDetectionDuration(uint8_t duration)
+{
+    writeRegister8(MPU6050_REG_ZMOT_DURATION, duration);
+}
+
+uint8_t MPU6050::getFreeFallDetectionThreshold(void)
+{
+    return readRegister8(MPU6050_REG_FF_THRESHOLD);
+}
+
+void MPU6050::setFreeFallDetectionThreshold(uint8_t threshold)
+{
+    writeRegister8(MPU6050_REG_FF_THRESHOLD, threshold);
+}
+
+uint8_t MPU6050::getFreeFallDetectionDuration(void)
+{
+    return readRegister8(MPU6050_REG_FF_DURATION);
+}
+
+void MPU6050::setFreeFallDetectionDuration(uint8_t duration)
+{
+    writeRegister8(MPU6050_REG_FF_DURATION, duration);
 }
 
 bool MPU6050::getI2CMasterModeEnabled(void)
@@ -182,9 +279,50 @@ bool MPU6050::getI2CBypassEnabled(void)
     return readRegisterBit(MPU6050_REG_INT_PIN_CFG, 1);
 }
 
-void MPU6050::setI2CBypassEnabled(bool state)
+void MPU6050::setAccelPowerOnDelay(mpu6050_onDelay_t delay)
 {
-    writeRegisterBit(MPU6050_REG_INT_PIN_CFG, 1, state);
+    uint8_t value;
+    value = readRegister8(MPU6050_REG_MOT_DETECT_CTRL);
+    value &= 0b11001111;
+    value |= (delay << 4);
+    writeRegister8(MPU6050_REG_MOT_DETECT_CTRL, value);
+}
+
+mpu6050_onDelay_t MPU6050::getAccelPowerOnDelay(void)
+{
+    uint8_t value;
+    value = readRegister8(MPU6050_REG_MOT_DETECT_CTRL);
+    value &= 0b00110000;
+    return (mpu6050_onDelay_t)(value >> 4);
+}
+
+uint8_t MPU6050::getIntStatus(void)
+{
+    return readRegister8(MPU6050_REG_INT_STATUS);
+}
+
+Activites MPU6050::readActivites(void)
+{
+    uint8_t data = readRegister8(MPU6050_REG_INT_STATUS);
+
+    a.isOverflow = ((data >> 4) & 1);
+    a.isFreeFall = ((data >> 7) & 1);
+    a.isInactivity = ((data >> 5) & 1);
+    a.isActivity = ((data >> 6) & 1);
+    a.isDataReady = ((data >> 0) & 1);
+
+    data = readRegister8(MPU6050_REG_MOT_DETECT_STATUS);
+
+    a.isNegActivityOnX = ((data >> 7) & 1);
+    a.isPosActivityOnX = ((data >> 6) & 1);
+
+    a.isNegActivityOnY = ((data >> 5) & 1);
+    a.isPosActivityOnY = ((data >> 4) & 1);
+
+    a.isNegActivityOnZ = ((data >> 3) & 1);
+    a.isPosActivityOnZ = ((data >> 2) & 1);
+
+    return a;
 }
 
 Vector MPU6050::readRawAccel(void)
