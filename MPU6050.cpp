@@ -274,6 +274,11 @@ void MPU6050::setI2CMasterModeEnabled(bool state)
     writeRegisterBit(MPU6050_REG_USER_CTRL, 5, state);
 }
 
+void MPU6050::setI2CBypassEnabled(bool state)
+{
+    return writeRegisterBit(MPU6050_REG_INT_PIN_CFG, 1, state);
+}
+
 bool MPU6050::getI2CBypassEnabled(void)
 {
     return readRegisterBit(MPU6050_REG_INT_PIN_CFG, 1);
