@@ -1,4 +1,4 @@
-MPU6050 Arduino Library 1.0.1 / .10.2014
+MPU6050 Arduino Library 1.0.1 / 26.10.2014
 ======================================================================
 
  * Removing examples for Kalman Filter. Moved to KalmanFilter Git repo
