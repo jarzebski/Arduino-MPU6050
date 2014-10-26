@@ -1,3 +1,9 @@
+MPU6050 Arduino Library 1.0.1 / .10.2014
+======================================================================
+
+ * Removing examples for Kalman Filter. Moved to KalmanFilter Git repo
+ * Removing examples for HMC5883L. Moved to HMC5833L Git repo
+
 MPU6050 Arduino Library 1.0.0 / 20.10.2014
 ======================================================================
 
