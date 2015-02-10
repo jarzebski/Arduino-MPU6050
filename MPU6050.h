@@ -1,7 +1,7 @@
 /*
 MPU6050.h - Header file for the MPU6050 Triple Axis Gyroscope & Accelerometer Arduino Library.
 
-Version: 1.0.1
+Version: 1.0.2
 (c) 2014 Korneliusz Jarzebski
 www.jarzebski.pl
 
@@ -146,7 +146,7 @@ class MPU6050
 {
     public:
 
-	bool begin(mpu6050_dps_t scale = MPU6050_SCALE_2000DPS, mpu6050_range_t = MPU6050_RANGE_2G);
+	bool begin(mpu6050_dps_t scale = MPU6050_SCALE_2000DPS, mpu6050_range_t range = MPU6050_RANGE_2G, int mpua = MPU6050_ADDRESS);
 
 	void setClockSource(mpu6050_clockSource_t source);
 	void setScale(mpu6050_dps_t scale);
@@ -227,6 +227,7 @@ class MPU6050
 	float dpsPerDigit, rangePerDigit;
 	float actualThreshold;
 	bool useCalibrate;
+	int mpuAddress;
 
 	uint8_t fastRegister8(uint8_t reg);
 

@@ -1,7 +1,7 @@
 /*
 MPU6050.cpp - Class file for the MPU6050 Triple Axis Gyroscope & Accelerometer Arduino Library.
 
-Version: 1.0.1
+Version: 1.0.2
 (c) 2014 Korneliusz Jarzebski
 www.jarzebski.pl
 
@@ -29,8 +29,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <MPU6050.h>
 
-bool MPU6050::begin(mpu6050_dps_t scale, mpu6050_range_t range)
+bool MPU6050::begin(mpu6050_dps_t scale, mpu6050_range_t range, int mpua)
 {
+    // Set Address
+    mpuAddress = mpua;
+
     Wire.begin();
 
     // Reset calibrate values
@@ -332,7 +335,7 @@ Activites MPU6050::readActivites(void)
 
 Vector MPU6050::readRawAccel(void)
 {
-    Wire.beginTransmission(MPU6050_ADDRESS);
+    Wire.beginTransmission(mpuAddress);
     #if ARDUINO >= 100
 	Wire.write(MPU6050_REG_ACCEL_XOUT_H);
     #else
@@ -340,8 +343,8 @@ Vector MPU6050::readRawAccel(void)
     #endif
     Wire.endTransmission();
 
-    Wire.beginTransmission(MPU6050_ADDRESS);
-    Wire.requestFrom(MPU6050_ADDRESS, 6);
+    Wire.beginTransmission(mpuAddress);
+    Wire.requestFrom(mpuAddress, 6);
 
     while (Wire.available() < 6);
 
@@ -393,7 +396,7 @@ Vector MPU6050::readScaledAccel(void)
 
 Vector MPU6050::readRawGyro(void)
 {
-    Wire.beginTransmission(MPU6050_ADDRESS);
+    Wire.beginTransmission(mpuAddress);
     #if ARDUINO >= 100
 	Wire.write(MPU6050_REG_GYRO_XOUT_H);
     #else
@@ -401,8 +404,8 @@ Vector MPU6050::readRawGyro(void)
     #endif
     Wire.endTransmission();
 
-    Wire.beginTransmission(MPU6050_ADDRESS);
-    Wire.requestFrom(MPU6050_ADDRESS, 6);
+    Wire.beginTransmission(mpuAddress);
+    Wire.requestFrom(mpuAddress, 6);
 
     while (Wire.available() < 6);
 
@@ -606,7 +609,7 @@ uint8_t MPU6050::fastRegister8(uint8_t reg)
 {
     uint8_t value;
 
-    Wire.beginTransmission(MPU6050_ADDRESS);
+    Wire.beginTransmission(mpuAddress);
     #if ARDUINO >= 100
 	Wire.write(reg);
     #else
@@ -614,8 +617,8 @@ uint8_t MPU6050::fastRegister8(uint8_t reg)
     #endif
     Wire.endTransmission();
 
-    Wire.beginTransmission(MPU6050_ADDRESS);
-    Wire.requestFrom(MPU6050_ADDRESS, 1);
+    Wire.beginTransmission(mpuAddress);
+    Wire.requestFrom(mpuAddress, 1);
     #if ARDUINO >= 100
 	value = Wire.read();
     #else
@@ -631,7 +634,7 @@ uint8_t MPU6050::readRegister8(uint8_t reg)
 {
     uint8_t value;
 
-    Wire.beginTransmission(MPU6050_ADDRESS);
+    Wire.beginTransmission(mpuAddress);
     #if ARDUINO >= 100
 	Wire.write(reg);
     #else
@@ -639,8 +642,8 @@ uint8_t MPU6050::readRegister8(uint8_t reg)
     #endif
     Wire.endTransmission();
 
-    Wire.beginTransmission(MPU6050_ADDRESS);
-    Wire.requestFrom(MPU6050_ADDRESS, 1);
+    Wire.beginTransmission(mpuAddress);
+    Wire.requestFrom(mpuAddress, 1);
     while(!Wire.available()) {};
     #if ARDUINO >= 100
 	value = Wire.read();
@@ -655,7 +658,7 @@ uint8_t MPU6050::readRegister8(uint8_t reg)
 // Write 8-bit to register
 void MPU6050::writeRegister8(uint8_t reg, uint8_t value)
 {
-    Wire.beginTransmission(MPU6050_ADDRESS);
+    Wire.beginTransmission(mpuAddress);
 
     #if ARDUINO >= 100
 	Wire.write(reg);
@@ -670,7 +673,7 @@ void MPU6050::writeRegister8(uint8_t reg, uint8_t value)
 int16_t MPU6050::readRegister16(uint8_t reg)
 {
     int16_t value;
-    Wire.beginTransmission(MPU6050_ADDRESS);
+    Wire.beginTransmission(mpuAddress);
     #if ARDUINO >= 100
         Wire.write(reg);
     #else
@@ -678,8 +681,8 @@ int16_t MPU6050::readRegister16(uint8_t reg)
     #endif
     Wire.endTransmission();
 
-    Wire.beginTransmission(MPU6050_ADDRESS);
-    Wire.requestFrom(MPU6050_ADDRESS, 2);
+    Wire.beginTransmission(mpuAddress);
+    Wire.requestFrom(mpuAddress, 2);
     while(!Wire.available()) {};
     #if ARDUINO >= 100
         uint8_t vha = Wire.read();
@@ -697,7 +700,7 @@ int16_t MPU6050::readRegister16(uint8_t reg)
 
 void MPU6050::writeRegister16(uint8_t reg, int16_t value)
 {
-    Wire.beginTransmission(MPU6050_ADDRESS);
+    Wire.beginTransmission(mpuAddress);
 
     #if ARDUINO >= 100
 	Wire.write(reg);

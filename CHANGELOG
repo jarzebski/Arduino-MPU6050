@@ -1,3 +1,10 @@
+MPU6050 Arduino Library 1.0.2 / 10.02.2015
+======================================================================
+
+ * Adjustable i2c address
+   mpu.begin(MPU6050_SCALE_2000DPS, MPU6050_RANGE_2G) - default 0x68
+   mpu.begin(MPU6050_SCALE_2000DPS, MPU6050_RANGE_2G, 0x69) - use 0x69
+
 MPU6050 Arduino Library 1.0.1 / 26.10.2014
 ======================================================================
 
