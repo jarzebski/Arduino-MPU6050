@@ -1,8 +1,8 @@
 /*
 MPU6050.h - Header file for the MPU6050 Triple Axis Gyroscope & Accelerometer Arduino Library.
 
-Version: 1.0.2
-(c) 2014 Korneliusz Jarzebski
+Version: 1.0.3
+(c) 2014-2015 Korneliusz Jarzebski
 www.jarzebski.pl
 
 This program is free software: you can redistribute it and/or modify
@@ -41,6 +41,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define MPU6050_REG_GYRO_YOFFS_L      (0x16)
 #define MPU6050_REG_GYRO_ZOFFS_H      (0x17)
 #define MPU6050_REG_GYRO_ZOFFS_L      (0x18)
+#define MPU6050_REG_CONFIG            (0x1A)
 #define MPU6050_REG_GYRO_CONFIG       (0x1B) // Gyroscope Configuration
 #define MPU6050_REG_ACCEL_CONFIG      (0x1C) // Accelerometer Configuration
 #define MPU6050_REG_FF_THRESHOLD      (0x1D)
@@ -142,6 +143,17 @@ typedef enum
     MPU6050_DHPF_RESET            = 0b000,
 } mpu6050_dhpf_t;
 
+typedef enum
+{
+    MPU6050_DLPF_6                = 0b110,
+    MPU6050_DLPF_5                = 0b101,
+    MPU6050_DLPF_4                = 0b100,
+    MPU6050_DLPF_3                = 0b011,
+    MPU6050_DLPF_2                = 0b010,
+    MPU6050_DLPF_1                = 0b001,
+    MPU6050_DLPF_0                = 0b000,
+} mpu6050_dlpf_t;
+
 class MPU6050
 {
     public:
@@ -155,6 +167,7 @@ class MPU6050
 	mpu6050_dps_t getScale(void);
 	mpu6050_range_t getRange(void);
 	void setDHPFMode(mpu6050_dhpf_t dhpf);
+	void setDLPFMode(mpu6050_dlpf_t dlpf);
 	mpu6050_onDelay_t getAccelPowerOnDelay();
 	void setAccelPowerOnDelay(mpu6050_onDelay_t delay);
 

@@ -1,8 +1,8 @@
 /*
 MPU6050.cpp - Class file for the MPU6050 Triple Axis Gyroscope & Accelerometer Arduino Library.
 
-Version: 1.0.2
-(c) 2014 Korneliusz Jarzebski
+Version: 1.0.3
+(c) 2014-2015 Korneliusz Jarzebski
 www.jarzebski.pl
 
 This program is free software: you can redistribute it and/or modify
@@ -148,6 +148,15 @@ void MPU6050::setDHPFMode(mpu6050_dhpf_t dhpf)
     value &= 0b11111000;
     value |= dhpf;
     writeRegister8(MPU6050_REG_ACCEL_CONFIG, value);
+}
+
+void MPU6050::setDLPFMode(mpu6050_dlpf_t dlpf)
+{
+    uint8_t value;
+    value = readRegister8(MPU6050_REG_CONFIG);
+    value &= 0b11111000;
+    value |= dlpf;
+    writeRegister8(MPU6050_REG_CONFIG, value);
 }
 
 void MPU6050::setClockSource(mpu6050_clockSource_t source)
