@@ -353,9 +353,10 @@ Vector MPU6050::readRawAccel(void)
     Wire.endTransmission();
 
     Wire.beginTransmission(mpuAddress);
-    Wire.requestFrom(mpuAddress, 6);
-
-    while (Wire.available() < 6);
+    if (Wire.requestFrom(mpuAddress, 6) != 6) {
+		errno = ERR_NOT_ENOUGH_BYTES;
+		return 0;
+	}
 
     #if ARDUINO >= 100
 	uint8_t xha = Wire.read();
@@ -413,10 +414,12 @@ Vector MPU6050::readRawGyro(void)
     #endif
     Wire.endTransmission();
 
-    Wire.beginTransmission(mpuAddress);
-    Wire.requestFrom(mpuAddress, 6);
+	
+    if (Wire.requestFrom(mpuAddress, 6) != 6) {
+		errno = ERR_NOT_ENOUGH_BYTES;
+		return 0;
+	}
 
-    while (Wire.available() < 6);
 
     #if ARDUINO >= 100
 	uint8_t xha = Wire.read();
@@ -627,7 +630,10 @@ uint8_t MPU6050::fastRegister8(uint8_t reg)
     Wire.endTransmission();
 
     Wire.beginTransmission(mpuAddress);
-    Wire.requestFrom(mpuAddress, 1);
+    if (Wire.requestFrom(mpuAddress, 1) != 1) {
+		errno = ERR_NOT_ENOUGH_BYTES;
+		return 0;
+	}
     #if ARDUINO >= 100
 	value = Wire.read();
     #else
@@ -652,8 +658,10 @@ uint8_t MPU6050::readRegister8(uint8_t reg)
     Wire.endTransmission();
 
     Wire.beginTransmission(mpuAddress);
-    Wire.requestFrom(mpuAddress, 1);
-    while(!Wire.available()) {};
+    if (Wire.requestFrom(mpuAddress, 1) != 1) {
+		return 0;
+	}
+    
     #if ARDUINO >= 100
 	value = Wire.read();
     #else
@@ -691,8 +699,10 @@ int16_t MPU6050::readRegister16(uint8_t reg)
     Wire.endTransmission();
 
     Wire.beginTransmission(mpuAddress);
-    Wire.requestFrom(mpuAddress, 2);
-    while(!Wire.available()) {};
+    if (Wire.requestFrom(mpuAddress, 2) != 2) {
+		errno = ERR_NOT_ENOUGH_BYTES;
+		return 0;
+	}
     #if ARDUINO >= 100
         uint8_t vha = Wire.read();
         uint8_t vla = Wire.read();

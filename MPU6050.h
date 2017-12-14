@@ -75,6 +75,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #ifndef VECTOR_STRUCT_H
 #define VECTOR_STRUCT_H
+
+// Errors
+#define ERR_NOERR 			0
+#define ERR_NOT_ENOUG_BYTES	1
+
 struct Vector
 {
     float XAxis;
@@ -230,6 +235,7 @@ class MPU6050
 	Vector readNormalizeAccel(void);
 	Vector readScaledAccel(void);
 
+	uint8_t getErrno();
     private:
 	Vector ra, rg; // Raw vectors
 	Vector na, ng; // Normalized vectors
@@ -242,6 +248,7 @@ class MPU6050
 	bool useCalibrate;
 	int mpuAddress;
 
+	uint8_t errno;
 	uint8_t fastRegister8(uint8_t reg);
 
 	uint8_t readRegister8(uint8_t reg);
