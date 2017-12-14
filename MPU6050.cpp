@@ -355,7 +355,7 @@ Vector MPU6050::readRawAccel(void)
     Wire.beginTransmission(mpuAddress);
     if (Wire.requestFrom(mpuAddress, 6) != 6) {
 		errno = ERR_NOT_ENOUGH_BYTES;
-		return 0;
+		return ra;
 	}
 
     #if ARDUINO >= 100
@@ -417,7 +417,7 @@ Vector MPU6050::readRawGyro(void)
 	
     if (Wire.requestFrom(mpuAddress, 6) != 6) {
 		errno = ERR_NOT_ENOUGH_BYTES;
-		return 0;
+		return rg;
 	}
 
 
@@ -615,7 +615,11 @@ void MPU6050::setThreshold(uint8_t multiple)
     // Remember old threshold value
     actualThreshold = multiple;
 }
-
+uint8_t MPU6050::getErrno(void) 
+{
+	uint8_t errno;
+	return errno;
+}
 // Fast read 8-bit from register
 uint8_t MPU6050::fastRegister8(uint8_t reg)
 {

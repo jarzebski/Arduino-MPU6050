@@ -77,8 +77,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define VECTOR_STRUCT_H
 
 // Errors
-#define ERR_NOERR 			0
-#define ERR_NOT_ENOUG_BYTES	1
+#define ERR_NOERR 				0
+#define ERR_NOT_ENOUGH_BYTES	1
 
 struct Vector
 {
@@ -235,7 +235,7 @@ class MPU6050
 	Vector readNormalizeAccel(void);
 	Vector readScaledAccel(void);
 
-	uint8_t getErrno();
+	uint8_t getErrno(void);
     private:
 	Vector ra, rg; // Raw vectors
 	Vector na, ng; // Normalized vectors
