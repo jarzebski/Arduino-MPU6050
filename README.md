@@ -1,6 +1,11 @@
 Arduino-MPU6050
 ===============
 
+This version was edited by Henrique Bruno Fantauzzi de Almeida (SrBrahma) - Minerva Rockets, UFRJ, Rio de Janeiro - Brazil.
+Some vital stuff on the MPU6050.cpp were fixed (like wrong or missing typecasts), some nice stuff were added (like calibration based on offsets, which are written on the sensor registers), and general code improvement.
+
+--- Text below is from the original repository. ---
+
 MPU6050 Triple Axis Gyroscope & Accelerometer Arduino Library.
 
 ![MPU6050 Processing](http://www.jarzebski.pl/media/zoom/publish/2014/10/mpu6050-processing-2.png "MPU6050 Processing")

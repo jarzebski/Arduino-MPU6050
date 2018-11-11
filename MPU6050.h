@@ -16,6 +16,8 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+Edited by Henrique Bruno Fantauzzi de Almeida (SrBrahma) - Minerva Rockets, UFRJ, Rio de Janeiro - Brazil
 */
 
 #ifndef MPU6050_h
@@ -27,7 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "WProgram.h"
 #endif
 
-#define MPU6050_ADDRESS             (0x68) // 0x69 when AD0 pin to Vcc
+#define MPU6050_ADDRESS               (0x68) // 0x69 when AD0 pin to Vcc
 
 #define MPU6050_REG_ACCEL_XOFFS_H     (0x06)
 #define MPU6050_REG_ACCEL_XOFFS_L     (0x07)
@@ -75,15 +77,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #ifndef VECTOR_STRUCT_H
 #define VECTOR_STRUCT_H
+
 struct Vector
 {
     float XAxis;
     float YAxis;
     float ZAxis;
 };
+
 #endif
 
-struct Activites
+struct Activities
 {
     bool isOverflow;
     bool isFreeFall;
@@ -156,102 +160,124 @@ typedef enum
 
 class MPU6050
 {
-    public:
 
-	bool begin(mpu6050_dps_t scale = MPU6050_SCALE_2000DPS, mpu6050_range_t range = MPU6050_RANGE_2G, int mpua = MPU6050_ADDRESS);
+public:
 
-	void setClockSource(mpu6050_clockSource_t source);
-	void setScale(mpu6050_dps_t scale);
-	void setRange(mpu6050_range_t range);
-	mpu6050_clockSource_t getClockSource(void);
-	mpu6050_dps_t getScale(void);
-	mpu6050_range_t getRange(void);
-	void setDHPFMode(mpu6050_dhpf_t dhpf);
-	void setDLPFMode(mpu6050_dlpf_t dlpf);
-	mpu6050_onDelay_t getAccelPowerOnDelay();
-	void setAccelPowerOnDelay(mpu6050_onDelay_t delay);
+    bool begin(mpu6050_dps_t gyroScale = MPU6050_SCALE_2000DPS, mpu6050_range_t accelRange = MPU6050_RANGE_2G, int mpuAddress = MPU6050_ADDRESS);
+    
+    void resetDevice(mpu6050_dps_t gyroScale = MPU6050_SCALE_2000DPS, mpu6050_range_t accelRange = MPU6050_RANGE_2G, int mpuAddress = MPU6050_ADDRESS);
 
-	uint8_t getIntStatus(void);
+    void    calibrateGyroscope(uint16_t samples = 1000);
+    void    calibrateAccelerometer(uint16_t samples = 1000);
 
-	bool getIntZeroMotionEnabled(void);
-	void setIntZeroMotionEnabled(bool state);
-	bool getIntMotionEnabled(void);
-	void setIntMotionEnabled(bool state);
-	bool getIntFreeFallEnabled(void);
-	void setIntFreeFallEnabled(bool state);
+    Vector  readRawGyroscope(void);
+    Vector  readNormalizedGyroscope(void);
 
-	uint8_t getMotionDetectionThreshold(void);
-	void setMotionDetectionThreshold(uint8_t threshold);
-	uint8_t getMotionDetectionDuration(void);
-	void setMotionDetectionDuration(uint8_t duration);
+    Vector  readRawAccelerometer(void);
+    Vector  readNormalizedAccelerometer(void);
+    Vector  readScaledAccelerometer(void);
 
-	uint8_t getZeroMotionDetectionThreshold(void);
-	void setZeroMotionDetectionThreshold(uint8_t threshold);
-	uint8_t getZeroMotionDetectionDuration(void);
-	void setZeroMotionDetectionDuration(uint8_t duration);
+    void    getPitchAndRoll(Vector normAccel, float *pitch, float *roll);
 
-	uint8_t getFreeFallDetectionThreshold(void);
-	void setFreeFallDetectionThreshold(uint8_t threshold);
-	uint8_t getFreeFallDetectionDuration(void);
-	void setFreeFallDetectionDuration(uint8_t duration);
+    void    setClockSource(mpu6050_clockSource_t source);
 
-	bool getSleepEnabled(void);
-	void setSleepEnabled(bool state);
-	bool getI2CMasterModeEnabled(void);
-	void setI2CMasterModeEnabled(bool state);
-	bool getI2CBypassEnabled(void);
-	void setI2CBypassEnabled(bool state);
+    mpu6050_dps_t getGyroscopeScale(void);
+    void    setGyroscopeScale(mpu6050_dps_t scale);
 
-	float readTemperature(void);
-	Activites readActivites(void);
+    mpu6050_range_t getAccelerometerRange(void);
+    void    setAccelerometerRange(mpu6050_range_t range);
 
-	int16_t getGyroOffsetX(void);
-	void setGyroOffsetX(int16_t offset);
-	int16_t getGyroOffsetY(void);
-	void setGyroOffsetY(int16_t offset);
-	int16_t getGyroOffsetZ(void);
-	void setGyroOffsetZ(int16_t offset);
+    mpu6050_clockSource_t getClockSource(void);
+    
+    void    setDHPFMode(mpu6050_dhpf_t dhpf);
+    void    setDLPFMode(mpu6050_dlpf_t dlpf);
 
-	int16_t getAccelOffsetX(void);
-	void setAccelOffsetX(int16_t offset);
-	int16_t getAccelOffsetY(void);
-	void setAccelOffsetY(int16_t offset);
-	int16_t getAccelOffsetZ(void);
-	void setAccelOffsetZ(int16_t offset);
+    mpu6050_onDelay_t getAccelerometerPowerOnDelay();
+    void    setAccelerometerPowerOnDelay(mpu6050_onDelay_t delay);
 
-	void calibrateGyro(uint8_t samples = 50);
-	void setThreshold(uint8_t multiple = 1);
-	uint8_t getThreshold(void);
+    uint8_t getIntStatus(void);
 
-	Vector readRawGyro(void);
-	Vector readNormalizeGyro(void);
+    bool    getIntZeroMotionEnabled(void);
+    void    setIntZeroMotionEnabled(bool state);
 
-	Vector readRawAccel(void);
-	Vector readNormalizeAccel(void);
-	Vector readScaledAccel(void);
+    bool    getIntMotionEnabled(void);
+    void    setIntMotionEnabled(bool state);
 
-    private:
-	Vector ra, rg; // Raw vectors
-	Vector na, ng; // Normalized vectors
-	Vector tg, dg; // Threshold and Delta for Gyro
-	Vector th;     // Threshold
-	Activites a;   // Activities
-	
-	float dpsPerDigit, rangePerDigit;
-	float actualThreshold;
-	bool useCalibrate;
-	int mpuAddress;
+    bool    getIntFreeFallEnabled(void);
+    void    setIntFreeFallEnabled(bool state);
 
-	uint8_t fastRegister8(uint8_t reg);
+    uint8_t getMotionDetectionThreshold(void);
+    void    setMotionDetectionThreshold(uint8_t threshold);
 
-	uint8_t readRegister8(uint8_t reg);
-	void writeRegister8(uint8_t reg, uint8_t value);
+    uint8_t getMotionDetectionDuration(void);
+    void    setMotionDetectionDuration(uint8_t duration);
 
-	int16_t readRegister16(uint8_t reg);
-	void writeRegister16(uint8_t reg, int16_t value);
+    uint8_t getZeroMotionDetectionThreshold(void);
+    void    setZeroMotionDetectionThreshold(uint8_t threshold);
 
-	bool readRegisterBit(uint8_t reg, uint8_t pos);
-	void writeRegisterBit(uint8_t reg, uint8_t pos, bool state);
+    uint8_t getZeroMotionDetectionDuration(void);
+    void    setZeroMotionDetectionDuration(uint8_t duration);
+
+    uint8_t getFreeFallDetectionThreshold(void);
+    void    setFreeFallDetectionThreshold(uint8_t threshold);
+
+    uint8_t getFreeFallDetectionDuration(void);
+    void    setFreeFallDetectionDuration(uint8_t duration);
+
+    bool    getSleepEnabled(void);
+    void    setSleepEnabled(bool state);
+
+    bool    getI2CMasterModeEnabled(void);
+    void    setI2CMasterModeEnabled(bool state);
+
+    bool    getI2CBypassEnabled(void);
+    void    setI2CBypassEnabled(bool state);
+
+    float   readTemperature(void);
+
+    Activities readActivites(void);
+
+    int16_t getGyroscopeOffsetX(void);
+    void    setGyroscopeOffsetX(int16_t offset);
+
+    int16_t getGyroscopeOffsetY(void);
+    void    setGyroscopeOffsetY(int16_t offset);
+
+    int16_t getGyroscopeOffsetZ(void);
+    void    setGyroscopeOffsetZ(int16_t offset);
+
+    int16_t getAccelerometerOffsetX(void);
+    void    setAccelerometerOffsetX(int16_t offset);
+
+    int16_t getAccelerometerOffsetY(void);
+    void    setAccelerometerOffsetY(int16_t offset);
+
+    int16_t getAccelerometerOffsetZ(void);
+    void    setAccelerometerOffsetZ(int16_t offset);
+
+    void    setGyroscopeThreshold(float percentOfMaximumValue);
+    float   getGyroscopeThreshold(void);
+
+private:
+
+    int     mMpuAddress;
+    Activities mActivities;   // Activities
+
+    Vector  mRawAccelerometer, mRawGyroscope; // Raw vectors
+    float   mDegreesPerDigit, mRangePerDigit;
+    Vector  mNormalizedAccelerometer, mNormalizedGyroscope; // Normalized vectors
+
+    float   mGyroscopeThreshold; // Threshold and Delta for Gyro
+
+    void    writeRegisterBit(uint8_t reg, uint8_t pos, bool state);
+    bool    readRegisterBit (uint8_t reg, uint8_t pos);
+
+    uint8_t fastRegister8 (uint8_t reg);
+    uint8_t readRegister8 (uint8_t reg);
+    int16_t readRegister16(uint8_t reg);
+
+    void    writeRegister8 (uint8_t reg, uint8_t value);
+    void    writeRegister16(uint8_t reg, int16_t value);
 
 };
 
