@@ -1,0 +1,24 @@
+{
+    "name": "MPU650",
+    "keywords": "MPU650, i2c, mpu-650, gyroscope,  sensor, temperature",
+    "description": "Arduino Library MPU650 Accelorate ICs (DS18B20, DS18S20, DS1822, DS1820)",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/jarzebski/Arduino-MPU6050.git"
+    },
+    "authors": [{
+            "name": "Korneliusz Jarzębski",
+            "email": "",
+            "url": "http://www.jarzebski.pl/",
+            "maintainer": true
+        },
+        {
+            "name": "Rudi Middel",
+            "email": "r.middel@mrbussy.eu"
+        }
+    ],
+    "dependencies": [],
+    "version": "1.0.0",
+    "frameworks": "arduino",
+    "platforms": "*"
+}
